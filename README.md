@@ -17,7 +17,7 @@ A Pupil Plugin for Pupil Capture that detects ArUco Markers and identifies when 
 * `marker_tracker_and_fixation.py`
 * `led_control.py`
 * `square_marker_detect.py`
-* `arduinoseria.py`
+* `arduinoserial.py`
 
 4. Restart Pupil Capture
 
