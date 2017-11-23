@@ -20,26 +20,29 @@ class LedControl():
     def clear(self):
         return '0' * (LEDS_PER_BOX * 3) + '\n'
 
-    def get_led_string(self, markers, max_marker_id, max_distance):
+    def get_led_string(self, markers, max_marker_id, max_distance, angle_adjustment):
         string = ''
         for i in range(1, max_marker_id+1):
             ids = list(map(lambda x: x['id'], markers))
             if i in ids:
                 m = next((marker for marker in markers if marker['id'] == i))
-                string += self.get_led_param_per_fiducial(m, max_distance)
+                string += self.get_led_param_per_fiducial(m, max_distance, angle_adjustment)
             else:
                 string += '0'*(LEDS_PER_BOX*3)
         return string + '\n'
 
-    def get_led_param_per_fiducial(self, marker, max_distance):
+    def get_led_param_per_fiducial(self, marker, max_distance, angle_adjustment):
         string = ''
         if marker['fixated']:
+            # set to green
             string += '030' * LEDS_PER_BOX
         elif marker['within_roi']:
+            # set to red
             string += '300' * LEDS_PER_BOX
         else:
             distance = int(round(marker['distance']))
-            angle = int(round(marker['angle'])) - (marker['rotation'] * 90)
+            # unomment out '- (marker['rotation'] * 90)' if causing problems
+            angle = int(round(marker['angle'])) - angle_adjustment # - (marker['rotation'] * 90)
 
             if distance == 0.0 or angle == 0.0:
                 return '0' * (LEDS_PER_BOX * 3)

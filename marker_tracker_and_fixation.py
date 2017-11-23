@@ -51,6 +51,7 @@ class Marker_Tracker_And_Fixation_Detector(Plugin):
             hit_region_extension_percentage=0.0,
             calibration_marker_id=0,
             indicator_max_distance_to_marker=1000,
+            angle_adjustment=0,
             max_fiducual_id=6,
             serial_port='/dev/tty.usbmodem1411',
             max_dispersion=3.0,
@@ -78,6 +79,7 @@ class Marker_Tracker_And_Fixation_Detector(Plugin):
         # LEDs
         self.max_fiducual_id = max_fiducual_id
         self.indicator_max_distance_to_marker = 1000
+        self.angle_adjustment = angle_adjustment
         self.serial_port = serial_port
         self.led_control = LedControl()
 
@@ -183,6 +185,8 @@ class Marker_Tracker_And_Fixation_Detector(Plugin):
         led_control_menu.append(ui.Text_Input('serial_port', self, setter=set_port, label='Serial Port'))
         led_control_menu.append(ui.Slider('indicator_max_distance_to_marker',
                                        self, label="Indicator Max Distance to Marker", step=10, min=1, max=10000))
+        led_control_menu.append(ui.Slider('angle_adjustment',
+                                       self, label="Angle Adjustment", step=1, min=0, max=360))
 
         self.menu.append(led_control_menu)
 
@@ -202,6 +206,7 @@ class Marker_Tracker_And_Fixation_Detector(Plugin):
             'hit_region_extension_percentage': self.hit_region_extension_percentage,
             'calibration_marker_id': self.calibration_marker_id,
             'indicator_max_distance_to_marker': self.indicator_max_distance_to_marker,
+            'angle_adjustment': self.angle_adjustment,
             'max_fiducual_id': self.max_fiducual_id,
             'serial_port': self.serial_port,
             'max_dispersion': self.max_dispersion,
@@ -322,7 +327,12 @@ class Marker_Tracker_And_Fixation_Detector(Plugin):
                         # logger.error("Marker {}: {}".format(m['id'], m['marker_angle']))
 
                 if len(gaze) > 0 and self.serial:
-                    led_string = self.led_control.get_led_string(self.visible_markers_flipped, self.max_fiducual_id, self.indicator_max_distance_to_marker)
+                    led_string = self.led_control.get_led_string(
+                        self.visible_markers_flipped,
+                        self.max_fiducual_id,
+                        self.indicator_max_distance_to_marker,
+                        self.angle_adjustment)
+
                     self.serial.write(led_string.encode())
                 elif self.serial:
                     # Clear LEDs
