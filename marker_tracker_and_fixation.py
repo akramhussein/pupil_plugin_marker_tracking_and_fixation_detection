@@ -69,7 +69,7 @@ class Marker_Tracker_And_Fixation_Detector(Plugin):
             indicator_max_distance_to_marker=1000,
             angle_adjustment=0,
             max_fiducual_id=6,
-            serial_port='/dev/tty.usbmodem1411',
+            serial_port='COM1',
             max_dispersion=3.0,
             min_duration=300,
             confidence_threshold=0.75):
