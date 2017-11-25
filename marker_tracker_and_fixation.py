@@ -103,7 +103,7 @@ class Marker_Tracker_And_Fixation_Detector(Plugin):
         try:
             # self.serial = arduinoserial.SerialPort(self.serial_port, 115200)
             self.serial = Serial(self.serial_port, 115200)
-        except FileNotFoundError:
+        except serial.serialutil.SerialException:
             self.serial = None
 
         # Fixation Detection
@@ -142,7 +142,7 @@ class Marker_Tracker_And_Fixation_Detector(Plugin):
                 self.serial = Serial(self.serial_port, 115200)
             except ValueError:
                 logger.error("Serial port must be an integer: {}. Unable to setup LEDs.".format(new_port))
-            except FileNotFoundError:
+            except serial.serialutil.SerialException:
                 logger.error("Serial port not valid: {}. Unable to setup LEDs.".format(new_port))
                 self.serial = None
 
