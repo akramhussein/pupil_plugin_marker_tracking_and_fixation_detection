@@ -9,7 +9,7 @@ import os
 import platform
 import cv2
 import numpy as np
-import arduinoserial
+import serial
 
 from led_control import LedControl
 from fixation_detector import gaze_dispersion, fixation_from_data
@@ -34,6 +34,22 @@ from copy import deepcopy
 
 import logging
 logger = logging.getLogger(__name__)
+
+class Serial():
+    ''' handle serial port communication '''
+    def __init__(self, port, baudrate):
+        self.ser = serial.Serial()
+        self.ser.baudrate = baudrate
+        self.ser.port = port
+        logging.info('Opened serial port ' + str(self.ser))
+        self.ser.open()
+
+    def write(self, data):
+        if self.ser.is_open:
+            self.ser.write(data)
+
+    def close(self):
+        self.ser.close()
 
 
 class Marker_Tracker_And_Fixation_Detector(Plugin):
@@ -85,7 +101,8 @@ class Marker_Tracker_And_Fixation_Detector(Plugin):
 
         # attempt to setup Serial port
         try:
-            self.serial = arduinoserial.SerialPort(self.serial_port, 115200)
+            # self.serial = arduinoserial.SerialPort(self.serial_port, 115200)
+            self.serial = Serial(self.serial_port, 115200)
         except FileNotFoundError:
             self.serial = None
 
@@ -122,7 +139,7 @@ class Marker_Tracker_And_Fixation_Detector(Plugin):
         def set_port(new_port):
             try:
                 self.serial_port = new_port
-                self.serial = arduinoserial.SerialPort(self.serial_port, 115200)
+                self.serial = Serial(self.serial_port, 115200)
             except ValueError:
                 logger.error("Serial port must be an integer: {}. Unable to setup LEDs.".format(new_port))
             except FileNotFoundError:
