@@ -9,8 +9,9 @@ import os
 import platform
 import cv2
 import numpy as np
-import serial
 
+
+from serial_control import Serial
 from led_control import LedControl
 from fixation_detector import gaze_dispersion, fixation_from_data
 from square_marker_detect_ import (
@@ -34,22 +35,6 @@ from copy import deepcopy
 
 import logging
 logger = logging.getLogger(__name__)
-
-class Serial():
-    ''' handle serial port communication '''
-    def __init__(self, port, baudrate):
-        self.ser = serial.Serial()
-        self.ser.baudrate = baudrate
-        self.ser.port = port
-        logging.info('Opened serial port ' + str(self.ser))
-        self.ser.open()
-
-    def write(self, data):
-        if self.ser.is_open:
-            self.ser.write(data)
-
-    def close(self):
-        self.ser.close()
 
 
 class Marker_Tracker_And_Fixation_Detector(Plugin):

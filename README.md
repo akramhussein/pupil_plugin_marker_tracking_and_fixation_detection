@@ -12,12 +12,7 @@ A Pupil Plugin for Pupil Capture that detects ArUco Markers and identifies when 
 
 2. Open Pupil Capture - this will create directory at `~/pupil_capture_settings/`
 
-3. Copy the following files to `~/pupil_capture_settings/plugins`:
-
-* `marker_tracker_and_fixation.py`
-* `led_control.py`
-* `square_marker_detect.py`
-* `arduinoserial.py`
+3. Copy the all the files to `~/pupil_capture_settings/plugins`.
 
 4. Restart Pupil Capture
 
